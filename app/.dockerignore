@@ -1,0 +1,5 @@
+.git
+.gitignore
+README.md
+microservice.yml
+**/*_test.go
