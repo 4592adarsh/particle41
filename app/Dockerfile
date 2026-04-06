@@ -14,3 +14,4 @@ COPY --from=build /simpletimeservice /simpletimeservice
 EXPOSE 8080
 USER nonroot:nonroot
 ENTRYPOINT ["/simpletimeservice"]
+ 
