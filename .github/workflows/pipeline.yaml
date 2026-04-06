@@ -23,6 +23,7 @@ jobs:
         with:
           context: ./app
           push: true
+          platforms: linux/amd64
           tags: 4592adarsh/particle41:${{ github.run_id }}
 
       - name: Update Kubernetes deployment file
