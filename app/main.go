@@ -55,8 +55,6 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// clientIP returns the visitor address, preferring proxy headers when present
-// (e.g. behind Ingress or a load balancer) and falling back to RemoteAddr.
 func clientIP(r *http.Request) string {
 	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
 		parts := strings.Split(xff, ",")
