@@ -41,6 +41,40 @@ spec:
               port: http
             initialDelaySeconds: 5
             periodSeconds: 10
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:3.0.4
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc/fluent-bit.conf
+              subPath: fluent-bit.conf
+      volumes:
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  labels:
+    app: simpletimeservice
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush        1
+        Daemon       Off
+        Log_Level    info
+
+    [INPUT]
+        # In a typical sidecar, the app writes to a shared volume file, and fluent bit tails it.
+        # Since the distroless app only targets stdout natively, here is a Forward/Dummy receiver template.
+        Name         dummy
+        Tag          sidecar.heartbeat
+
+    [OUTPUT]
+        Name         stdout
+        Match        *
 ---
 apiVersion: v1
 kind: Service
