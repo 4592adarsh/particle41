@@ -7,8 +7,10 @@ RUN go mod download
 
 COPY . .
 
-# HARDCODE GOARCH to amd64 to force the correct binary format
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+# Support Multi-Architecture Builds
+ARG TARGETOS
+ARG TARGETARCH
+RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64} \
     go build -trimpath -ldflags="-s -w" -o /simpletimeservice .
 
 # Step 2: Final Image

@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: simpletimeservice
-          image: 4592adarsh/particle41:24057520240
-          imagePullPolicy: Always
+          image: l4592adarsh/particle41:4567
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8080
