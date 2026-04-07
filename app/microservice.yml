@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: simpletimeservice
-          image: 4592adarsh/particle41:4567
+          image: 4592adarsh/particle41:24060640885
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
