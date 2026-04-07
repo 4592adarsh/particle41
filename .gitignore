@@ -23,5 +23,4 @@ override.tf.json
 terraform.rc
 
 # go build . writes a binary named after this directory (app) on Unix/macOS
-/app
 *.exe
