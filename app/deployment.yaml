@@ -21,7 +21,7 @@ spec:
         fsGroup: 65532
       containers:
         - name: simpletimeservice
-          image: 4592adarsh/particle41:24057123057
+          image: 4592adarsh/particle41:24057297225
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
