@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: simpletimeservice
-          image: 4592adarsh/particle41:24061076727
+          image: 4592adarsh/particle41:24061750378
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -42,7 +42,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
         - name: fluent-bit
-          image: 4592adarsh/particle41:24061076727
+          image: 4592adarsh/particle41:24061750378
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: fluent-bit-config
