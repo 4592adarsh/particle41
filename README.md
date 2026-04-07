@@ -1,4 +1,4 @@
-# Particle41 Assignment: Full Stack Infrastructure & Deployment
+# Particle41 Assignment: DevOps Team Challenge
 
 This repository contains the complete solutions for **Task 1** (Minimalist Application Development) and **Task 2** (Terraform and AWS EKS Deployment).
 
