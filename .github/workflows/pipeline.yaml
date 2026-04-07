@@ -29,19 +29,19 @@ jobs:
         with:
           context: ./app
           push: true
-          platforms: llinux/arm/v7,linux/arm64/v8,linux/amd64
+          platforms: linux/arm/v7,linux/arm64,linux/amd64
           provenance: false
           tags: 4592adarsh/particle41:${{ github.run_id }}
 
       - name: Update Kubernetes deployment file
         run: |
           # Updates the image line to 4592adarsh/particle41:<run_id>
-          sed -i "s|image: .*|image: 4592adarsh/particle41:${{ github.run_id }}|g" app/deployment.yaml
+          sed -i "s|image: .*|image: 4592adarsh/particle41:${{ github.run_id }}|g" app/microservice.yml
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add app/deployment.yaml
+          git add app/microservice.yml
           git commit -m "chore: update image tag to ${{ github.run_id }}"
           git push

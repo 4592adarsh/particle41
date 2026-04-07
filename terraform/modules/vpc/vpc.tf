@@ -1,11 +1,12 @@
 resource "aws_eip" "nat" {
   count = 1
 
-  vpc = true
+  domain = "vpc"
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
 
   name = var.vpc_name
   cidr = var.vpc_cidr
@@ -17,7 +18,7 @@ module "vpc" {
   public_subnets  = var.public_subnets_cidr
   public_subnet_suffix = "public-subnet"
   private_subnet_suffix = "private-subnet"
-  enable_vpn_gateway = true
+  enable_vpn_gateway = false
   enable_nat_gateway = true
   single_nat_gateway = true
   reuse_nat_ips = true
