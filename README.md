@@ -50,7 +50,7 @@ Before execution, you must securely authenticate your session with AWS by direct
 ```bash
 aws configure
 ```
-Provide your officially granted `AWS Access Key ID`, `AWS Secret Access Key`, and set your default deployment region (e.g., `us-east-1`).
+Provide your  `AWS Access Key ID`, `AWS Secret Access Key`, and set your default deployment region (e.g., `us-east-1`).
 
 ### Deployment Instructions
 
@@ -79,7 +79,6 @@ terraform apply
 
 ## Extra credit
 
-The following items go beyond the base assignment. Each bullet links to the implementation on GitHub (commit `ae91a5d4c224ac890324351cd17fc20f9d9e0ccf` where noted).
 
 ### Kubernetes manifest best practices
 
@@ -99,6 +98,16 @@ The following items go beyond the base assignment. Each bullet links to the impl
 
 ### CI/CD pipeline (GitHub Actions)
 
-- **Build and publish** — A GitHub Actions workflow builds the Docker image, pushes it to the container registry, and **updates the Kubernetes manifest** with the new image tag.
+- **Build and publish** — A GitHub Actions workflow builds the Docker image, pushes it to the container registry, and **updates `app/microservice.yml`** with the new image tag.
 - **GitOps / Argo CD** — If **Argo CD** watches that manifest in Git, it can sync the cluster to the new image automatically after each successful run.
   - Workflow: [GitHub Actions run example](https://github.com/4592adarsh/particle41/actions/runs/24061076727)
+
+---
+
+## Notes & gotchas
+
+- **Docker Hub — push still needs credentials** — A *public* image can be pulled without logging in, but **pushing** from CI (or your laptop) always requires authentication. Store a [Docker Hub access token](https://docs.docker.com/security/for-developers/access-tokens/) (not your account password) as a GitHub Actions secret (for example `DOCKERHUB_TOKEN`) and use it with `docker/login-action`.
+
+- **GitHub Actions — write access to the repo** — The workflow commits manifest updates (image tag changes) back to the repository. The default `GITHUB_TOKEN` must be allowed to **read and write** repository contents (`permissions: contents: write` in the workflow, and under **Settings → Actions → General**, avoid overly restrictive *Workflow permissions* that block pushes). This applies even when the repository is **public**; visibility does not grant the token push rights by itself if permissions are tightened at the org/repo level.
+
+- **`git pull` before you `git push`** — After each push to `main`, the pipeline may commit an updated image tag in **`app/microservice.yml`**. Always **`git pull --rebase`** (or merge) before pushing local changes so you do not hit a **non-fast-forward** / merge conflict on that file.
