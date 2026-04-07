@@ -1,7 +1,5 @@
-# syntax=docker/dockerfile:1
-# Buildx sets TARGETOS/TARGETARCH per --platform; final stage matches each arch (needed for arm64 Minikube on Apple Silicon).
-
-FROM --platform=$BUILDPLATFORM golang:1.23-alpine AS build
+# Step 1: Build Stage
+FROM golang:1.23-alpine AS build
 WORKDIR /src
 
 COPY go.mod go.sum* ./
@@ -9,13 +7,14 @@ RUN go mod download
 
 COPY . .
 
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags="-s -w" -o /simpletimeservice .
+# HARDCODE GOARCH to amd64 to force the correct binary format
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -trimpath -ldflags="-s -w" -o /simpletimeservice .
 
+# Step 2: Final Image
 FROM gcr.io/distroless/static-debian12:nonroot
 COPY --from=build /simpletimeservice /simpletimeservice
 
 EXPOSE 8080
-USER nonroot:nonroot
+USER 65532:65532 
 ENTRYPOINT ["/simpletimeservice"]
