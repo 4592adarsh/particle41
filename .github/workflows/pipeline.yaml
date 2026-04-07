@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -41,8 +43,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # -f: still stage the manifest if repo .gitignore ever ignores `app/` by mistake
           git add -f app/microservice.yml
           git commit -m "chore: update image tag to ${{ github.run_id }}"
+          git pull --rebase origin "${{ github.ref_name }}"
           git push
