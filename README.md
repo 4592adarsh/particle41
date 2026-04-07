@@ -74,3 +74,31 @@ terraform plan
 terraform apply
 ```
 *(Type `yes` when prompted to approve and generate the VPC and EKS Cluster. Both stacks will launch natively and simultaneously).*
+
+---
+
+## Extra credit
+
+The following items go beyond the base assignment. Each bullet links to the implementation on GitHub (commit `ae91a5d4c224ac890324351cd17fc20f9d9e0ccf` where noted).
+
+### Kubernetes manifest best practices
+
+- **Pod CPU and memory** — The Deployment defines a `resources` block with **requests** and **limits** so the scheduler can place pods predictably and the workload is bounded.
+  - See: [app/microservice.yml (resource requests / limits)](https://github.com/4592adarsh/particle41/blob/ae91a5d4c224ac890324351cd17fc20f9d9e0ccf/app/microservice.yml#L25)
+
+### Fluent Bit sidecar
+
+- **Log shipping** — A **Fluent Bit** sidecar runs alongside the app container in the same pod (for example to forward logs to a collector or cloud logging).
+  - See: [app/microservice.yml (Fluent Bit sidecar)](https://github.com/4592adarsh/particle41/blob/ae91a5d4c224ac890324351cd17fc20f9d9e0ccf/app/microservice.yml#L44)
+
+### Terraform remote backend (S3 + DynamoDB)
+
+- **Remote state and locking** — Terraform is wired for an **S3** backend and **DynamoDB** state locking instead of a local `terraform.tfstate` file.
+- **Enable it in your account** — In `terraform/development/provider.tf`, **uncomment** the `backend "s3" { ... }` block and set **`bucket`**, **`key`**, **`region`**, **`dynamodb_table`**, and **`encrypt`** to your real S3 bucket and DynamoDB lock table (see the commented example in-repo).
+  - See: [terraform/development/provider.tf (backend block)](https://github.com/4592adarsh/particle41/blob/ae91a5d4c224ac890324351cd17fc20f9d9e0ccf/terraform/development/provider.tf#L2)
+
+### CI/CD pipeline (GitHub Actions)
+
+- **Build and publish** — A GitHub Actions workflow builds the Docker image, pushes it to the container registry, and **updates the Kubernetes manifest** with the new image tag.
+- **GitOps / Argo CD** — If **Argo CD** watches that manifest in Git, it can sync the cluster to the new image automatically after each successful run.
+  - Workflow: [GitHub Actions run example](https://github.com/4592adarsh/particle41/actions/runs/24061076727)
