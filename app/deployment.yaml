@@ -21,7 +21,7 @@ spec:
         fsGroup: 65532
       containers:
         - name: simpletimeservice
-          image: 4592adarsh/particle41:24057297225
+          image: 4592adarsh/particle41:24057401722
           # Always pull so arm64 nodes get the arm64 digest from a multi-arch manifest (avoids stale amd64 cache on Minikube).
           imagePullPolicy: Always
           ports:
